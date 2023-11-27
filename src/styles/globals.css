@@ -1,3 +1,83 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.marked-emoji-img {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+}
+
+@layer components {
+  h1 {
+    @apply text-4xl font-bold mb-3;
+  }
+  h2 {
+    @apply text-3xl font-bold mb-3;
+  }
+  h3 {
+    @apply text-2xl font-bold mb-3;
+  }
+  h4 {
+    @apply text-xl font-bold mb-3;
+  }
+  h5 {
+    @apply text-lg font-bold mb-3;
+  }
+
+  p {
+    @apply mb-3;
+  }
+
+  a {
+    @apply text-blue-500 hover:text-blue-600;
+  }
+
+  ul {
+    @apply list-disc ml-3 list-inside mb-3;
+  }
+
+  ol {
+    @apply list-decimal ml-3 list-inside mb-3;
+  }
+
+  li {
+    @apply mb-1;
+  }
+
+  blockquote {
+    @apply border-l-4 border-gray-300 pl-4 mb-3;
+  }
+
+  hr {
+    @apply border-gray-300 my-3;
+  }
+
+  table {
+    @apply border-collapse border-gray-300 my-3;
+  }
+
+  th,
+  td {
+    @apply border border-gray-300 px-3 py-2;
+  }
+
+  code {
+    @apply rounded mx-2 px-2 py-[0.15rem];
+  }
+
+  pre {
+    @apply rounded my-3 mx-2;
+  }
+
+  img {
+    @apply my-3;
+  }
+
+  /* input type checkbox should have 
+  light blue background color with white check mark */
+
+  input[type='checkbox'] {
+    @apply rounded-full mr-2 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50;
+  }
+}
