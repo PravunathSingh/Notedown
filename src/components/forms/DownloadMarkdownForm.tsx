@@ -45,7 +45,6 @@ const DownloadMarkdownForm: React.FC<DownloadMarkdownFormProps> = ({
         value={markdownFileName}
         onChange={handleMarkdownFileNameChange}
         error={markdownFileNameError}
-        variant='filled'
         className='mb-5'
       />
 

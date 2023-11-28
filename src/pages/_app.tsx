@@ -9,6 +9,7 @@ import {
 import type { AppProps } from 'next/app';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const myColor: MantineColorsTuple = [
   '#ffebff',
@@ -29,13 +30,17 @@ const theme = createTheme({
   },
 });
 
+const queryClient = new QueryClient();
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <MantineProvider theme={theme}>
-      <ModalsProvider>
-        <Notifications position='bottom-right' />
-        <Component {...pageProps} />
-      </ModalsProvider>
-    </MantineProvider>
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider theme={theme}>
+        <ModalsProvider>
+          <Notifications position='bottom-right' />
+          <Component {...pageProps} />
+        </ModalsProvider>
+      </MantineProvider>
+    </QueryClientProvider>
   );
 }
