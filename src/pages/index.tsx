@@ -7,7 +7,7 @@ import { Modal } from '@mantine/core';
 import DownloadMarkdownForm from '@/components/forms/DownloadMarkdownForm';
 import DownloadPdfForm from '@/components/forms/DownloadPdfForm';
 import { parseMarkdown } from '@/utils/parseMarkdown';
-import { useDownloadPdf } from './apis/queries/downloadPdf.query';
+import { useDownloadPdf } from '@/apis/queries/downloadPdf.query';
 
 const HomePage = () => {
   const { isPreviewPanelOpen } = useEditorStore();
