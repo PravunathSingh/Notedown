@@ -51,7 +51,8 @@ export default async function handler(
   await page.setContent(htmlWithStyles);
   await page.emulateMediaType('screen');
 
-  const pdf = await page.pdf({
+  // generate a pdf and save it to the public folder
+  await page.pdf({
     path: `./public/${fileName}.pdf`,
     format: 'A4',
     printBackground: true,
@@ -60,8 +61,13 @@ export default async function handler(
 
   await browser.close();
 
-  // send the pdf as a response
-  res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', `attachment; filename=${fileName}.pdf`);
-  res.status(201).send(pdf);
+  // send the pdf name and path as a response
+  res
+    .setHeader('Content-Type', 'application/json')
+    .status(201)
+    .json({
+      message: 'ok',
+      fileName: `${fileName}.pdf`,
+      filePath: `/public/${fileName}.pdf`,
+    });
 }

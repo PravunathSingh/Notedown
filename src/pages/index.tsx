@@ -40,17 +40,16 @@ const HomePage = () => {
         doc: parseMarkdown(markdownValue),
       },
       {
-        onSuccess: (blob) => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.download = `${pdfFilename}.pdf`;
-          a.href = url;
-          a.click();
-          setTimeout(function () {
-            // For Firefox it is necessary to delay revoking the ObjectURL
-            a.remove();
-            URL.revokeObjectURL(url);
-          }, 100);
+        onSuccess: (data) => {
+          // the download link is like this: http://localhost:3000/1627667440.pdf
+          // so we just need to get the last part
+          const fileName = data.fileName;
+          const element = document.createElement('a');
+          element.href = `http://localhost:3000/${fileName}`;
+          element.download = `${pdfFilename}.pdf`;
+          document.body.appendChild(element);
+          element.click();
+
           closeParsedDocModal();
         },
       }

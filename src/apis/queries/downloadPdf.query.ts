@@ -12,9 +12,10 @@ export const useDownloadPdf = () => {
         body: JSON.stringify(data),
       });
 
-      const blob = await res.blob();
+      const resData = await res.json();
+      console.log(resData);
 
-      return blob;
+      return resData;
     },
     onError: (error) => {
       notifications.show({
