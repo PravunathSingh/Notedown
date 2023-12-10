@@ -34,5 +34,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       `attachment; filename=${fileName}.pdf`
     );
     res.send(pdf);
+    res.end();
   })();
 }
