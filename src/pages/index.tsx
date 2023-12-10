@@ -8,6 +8,7 @@ import DownloadMarkdownForm from '@/components/forms/DownloadMarkdownForm';
 import DownloadPdfForm from '@/components/forms/DownloadPdfForm';
 import { parseMarkdown } from '@/utils/parseMarkdown';
 import { useDownloadPdf } from '@/apis/queries/downloadPdf.query';
+import getBaseUrl from '@/utils/getBaseUrl';
 
 const HomePage = () => {
   const { isPreviewPanelOpen } = useEditorStore();
@@ -45,7 +46,9 @@ const HomePage = () => {
           // so we just need to get the last part
           const fileName = data.fileName;
           const element = document.createElement('a');
-          element.href = `http://localhost:3000/${fileName}`;
+          //  element.href is sitUrl/fileName
+
+          element.href = `${getBaseUrl('')}${fileName}`;
           element.download = `${pdfFilename}.pdf`;
           document.body.appendChild(element);
           element.click();
