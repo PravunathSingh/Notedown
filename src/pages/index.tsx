@@ -9,8 +9,11 @@ import DownloadPdfForm from '@/components/forms/DownloadPdfForm';
 import { parseMarkdown } from '@/utils/parseMarkdown';
 import { useDownloadPdf } from '@/apis/queries/downloadPdf.query';
 import getBaseUrl from '@/utils/getBaseUrl';
+import { useSharePreview } from '@/apis/queries/sharePreview.query';
+import PreviewModal from '@/components/editor/PreviewModal';
 
 const HomePage = () => {
+  const [previewLink, setPreviewLink] = React.useState<string | null>(null);
   const { isPreviewPanelOpen } = useEditorStore();
   const { markdownValue } = useEditorStore();
   const [
@@ -21,6 +24,12 @@ const HomePage = () => {
     parsedDocModalOpen,
     { open: openParsedDocModal, close: closeParsedDocModal },
   ] = useDisclosure();
+  const [
+    previewModalOpen,
+    { open: openPreviewModal, close: closePreviewModal },
+  ] = useDisclosure();
+
+  const sharePreview = useSharePreview();
 
   const downloadAsMarkdown = (markdownFilename: string) => {
     const element = document.createElement('a');
@@ -59,11 +68,40 @@ const HomePage = () => {
     );
   };
 
+  const sharePreviewHandler = ({
+    type,
+    doc,
+  }: {
+    type: 'md' | 'parsed';
+    doc: string;
+  }) => {
+    sharePreview.mutate(
+      {
+        type,
+        doc,
+      },
+      {
+        onSuccess: (data) => {
+          setPreviewLink(`${getBaseUrl('')}preview?fileName=${data.fileName}`);
+          openPreviewModal();
+        },
+      }
+    );
+  };
+
   return (
     <div className='container h-[80vh] my-10 flex gap-5 items-center'>
-      <MarkdownEditor onOpenMarkdownDownloadModal={openMarkdownDownloadModal} />
+      <MarkdownEditor
+        isGeneratingPreview={sharePreview.isPending}
+        onShareMarkdownPreview={sharePreviewHandler}
+        onOpenMarkdownDownloadModal={openMarkdownDownloadModal}
+      />
       {isPreviewPanelOpen && (
-        <PreviewPanel onOpenParsedDocModal={openParsedDocModal} />
+        <PreviewPanel
+          onShareHTMLPreview={sharePreviewHandler}
+          isGeneratingPreview={sharePreview.isPending}
+          onOpenParsedDocModal={openParsedDocModal}
+        />
       )}
 
       <Modal
@@ -87,6 +125,22 @@ const HomePage = () => {
           onClose={closeParsedDocModal}
           onSubmit={downloadAsPdf}
         />
+      </Modal>
+
+      <Modal
+        size='md'
+        opened={previewModalOpen}
+        onClose={closePreviewModal}
+        title='Preview Link'
+        centered
+        styles={{
+          title: {
+            fontSize: '1.185rem',
+            fontWeight: 600,
+          },
+        }}
+      >
+        <PreviewModal previewLink={previewLink} />
       </Modal>
     </div>
   );

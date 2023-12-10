@@ -14,6 +14,7 @@ import {
   IconSearch,
   IconReplace,
   IconDownload,
+  IconShare3,
 } from '@tabler/icons-react';
 import { useEditorStore } from '@/store/editorStore';
 import { IconEyeOff } from '@tabler/icons-react';
@@ -24,11 +25,22 @@ import EmojiDropdown from './EmojiDropdown';
 
 export interface MarkdownEditorProps {
   onOpenMarkdownDownloadModal: () => void;
+  onShareMarkdownPreview: ({
+    type,
+    doc,
+  }: {
+    type: 'md' | 'parsed';
+    doc: string;
+  }) => void;
+  isGeneratingPreview: boolean;
 }
 
 const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   onOpenMarkdownDownloadModal,
+  isGeneratingPreview,
+  onShareMarkdownPreview,
 }) => {
+  const [cursorPosition, setCursorPosition] = React.useState(0);
   const [markdown, setMarkdown] = React.useState('');
   const [searchedText, setSearchedText] = React.useState('');
   const [replacedText, setReplacedText] = React.useState('');
@@ -62,7 +74,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
     } else {
       setOccurrences(0);
     }
-  }, [searchedText]);
+  }, [markdown, searchedText]);
 
   const replaceAll = () => {
     const regex = new RegExp(searchedText, 'g');
@@ -72,6 +84,53 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
 
     setSearchedText('');
     setReplacedText('');
+  };
+
+  React.useEffect(() => {
+    const textarea = document.querySelector('textarea');
+    if (!textarea) return;
+    textarea.focus();
+
+    const handleCursorChange = () => {
+      setCursorPosition(textarea.selectionStart);
+    };
+
+    textarea.addEventListener('click', handleCursorChange);
+    textarea.addEventListener('keyup', handleCursorChange);
+
+    return () => {
+      textarea.removeEventListener('click', handleCursorChange);
+      textarea.removeEventListener('keyup', handleCursorChange);
+    };
+  }, [markdown]);
+
+  const insertEmoji = (emoji: { name: string; url: string }) => {
+    if (!markdown.trim().length) {
+      // insert emoji at cursor position
+      const start = cursorPosition;
+      const end = cursorPosition;
+      const value = markdown;
+      setMarkdown(value.substring(0, start) + `:${emoji.name}:`);
+      updateMarkdownValue(
+        value.substring(0, start) + `:${emoji.name}:` + value.substring(end)
+      );
+
+      console.log('cursorPosition', cursorPosition);
+    } else {
+      // insert emoji at cursor position
+      const start = cursorPosition;
+      const end = cursorPosition;
+      const value = markdown;
+
+      setMarkdown(
+        value.substring(0, start) + `:${emoji.name}:` + value.substring(end)
+      );
+      updateMarkdownValue(
+        value.substring(0, start) + `:${emoji.name}:` + value.substring(end)
+      );
+
+      console.log('cursorPosition', cursorPosition);
+    }
   };
 
   return (
@@ -94,17 +153,20 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
           >
             <IconDownload style={{ width: rem(18) }} />
           </ActionIcon>
-          <EmojiDropdown
-            onSelectEmoji={(emoji) => {
-              if (!markdown.trim().length) {
-                setMarkdown(`:${emoji.name}: ${markdown}`);
-                updateMarkdownValue(`:${emoji.name}: ${markdown}`);
-              } else {
-                setMarkdown(`${markdown} :${emoji.name}: `);
-                updateMarkdownValue(`${markdown} :${emoji.name}: `);
-              }
-            }}
-          />
+          <Tooltip label='Share as markdown' position='top'>
+            <ActionIcon
+              loading={isGeneratingPreview}
+              disabled={!markdown.trim().length}
+              variant='subtle'
+              color='gray'
+              onClick={() => {
+                onShareMarkdownPreview({ type: 'md', doc: markdown.trim() });
+              }}
+            >
+              <IconShare3 style={{ width: rem(18) }} />
+            </ActionIcon>
+          </Tooltip>
+          <EmojiDropdown onSelectEmoji={insertEmoji} />
           <Menu
             shadow='md'
             position='left-start'

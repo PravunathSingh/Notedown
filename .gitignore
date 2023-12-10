@@ -22,6 +22,8 @@
 
 # ignore all pdf files in public folder
 /public/*.pdf
+/public/*.md
+/public/*.html
 
 # debug
 npm-debug.log*

@@ -1,26 +1,33 @@
 import React from 'react';
 import { parseMarkdown } from '@/utils/parseMarkdown';
 import { useEditorStore } from '@/store/editorStore';
-import {
-  ActionIcon,
-  CopyButton,
-  Menu,
-  Select,
-  Tooltip,
-  rem,
-} from '@mantine/core';
+import { ActionIcon, CopyButton, Select, Tooltip, rem } from '@mantine/core';
 import * as DOMPurify from 'isomorphic-dompurify';
-import { IconCheck, IconCopy, IconDownload } from '@tabler/icons-react';
+import {
+  IconCheck,
+  IconCopy,
+  IconDownload,
+  IconShare3,
+} from '@tabler/icons-react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { addClassesToParsedHtml } from '@/utils/addClassesToParsedHtml';
-import { convertTailwindClassesToCss } from '@/apiUtils/convertTailwindClassesToCss';
 
 export interface PreviewPanelProps {
   onOpenParsedDocModal: () => void;
+  onShareHTMLPreview: ({
+    type,
+    doc,
+  }: {
+    type: 'md' | 'parsed';
+    doc: string;
+  }) => void;
+  isGeneratingPreview: boolean;
 }
 
 const PreviewPanel: React.FC<PreviewPanelProps> = ({
   onOpenParsedDocModal,
+  isGeneratingPreview,
+  onShareHTMLPreview,
 }) => {
   const { markdownValue } = useEditorStore();
   const [previewType, setPreviewType] = React.useState('rendered-html');
@@ -59,7 +66,20 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({
           >
             <IconDownload style={{ width: rem(18) }} />
           </ActionIcon>
-          {previewType === 'source-html' ? (
+          <Tooltip label='Share as parsed HTML' position='top'>
+            <ActionIcon
+              loading={isGeneratingPreview}
+              disabled={parsedHTML.trim().length === 0}
+              variant='subtle'
+              color='gray'
+              onClick={() => {
+                onShareHTMLPreview({ type: 'parsed', doc: parsedHTML });
+              }}
+            >
+              <IconShare3 style={{ width: rem(18) }} />
+            </ActionIcon>
+          </Tooltip>
+          {previewType !== 'source-html' ? (
             <CopyButton value={parsedHTML} timeout={2000}>
               {({ copied, copy }) => (
                 <Tooltip

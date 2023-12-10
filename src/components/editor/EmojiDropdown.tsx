@@ -59,7 +59,7 @@ const EmojiDropdown: React.FC<EmojiDropdownProps> = ({ onSelectEmoji }) => {
 
   return (
     <Menu
-      closeOnItemClick={false}
+      closeOnItemClick={true}
       onClose={() => {
         setSearchText('');
         setFilteredEmojis(emojis);
