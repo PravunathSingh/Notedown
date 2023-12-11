@@ -20,7 +20,6 @@ import { useEditorStore } from '@/store/editorStore';
 import { IconEyeOff } from '@tabler/icons-react';
 import { shallow } from 'zustand/shallow';
 import classNames from 'classnames';
-import { motion } from 'framer-motion';
 import EmojiDropdown from './EmojiDropdown';
 
 export interface MarkdownEditorProps {
@@ -114,6 +113,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
       updateMarkdownValue(
         value.substring(0, start) + `:${emoji.name}:` + value.substring(end)
       );
+      setCursorPosition(start + emoji.name.length + 2);
 
       console.log('cursorPosition', cursorPosition);
     } else {
@@ -129,20 +129,13 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
         value.substring(0, start) + `:${emoji.name}:` + value.substring(end)
       );
 
-      console.log('cursorPosition', cursorPosition);
+      setCursorPosition(start + emoji.name.length + 2);
     }
   };
 
   return (
-    <motion.div
-      initial={false}
-      animate={{ width: isPreviewPanelOpen ? '50%' : '100%' }}
-      className={classNames(
-        'max-w-full h-full my-20',
-        isPreviewPanelOpen ? 'w-1/2' : 'w-full'
-      )}
-    >
-      <div className='flex justify-between w-full mb-1'>
+    <div className={classNames('max-w-full grow h-full my-10')}>
+      <div className='flex justify-between gap-4 flex-wrap w-full mb-1'>
         <span className='text-lg font-semibold'>Markdown</span>
         <div className='flex items-center gap-4'>
           <ActionIcon
@@ -267,9 +260,9 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
         onChange={updateEditorValue}
         value={markdown}
         placeholder='Start typing...'
-        className='border font-mono border-gray-300 w-full h-[80vh] focus:outline focus:outline-indigo-500 rounded p-4 font-medium'
+        className='border resize-none font-mono border-gray-300 w-full h-[80vh] focus:outline focus:outline-indigo-500 rounded p-4 font-medium'
       ></textarea>
-    </motion.div>
+    </div>
   );
 };
 

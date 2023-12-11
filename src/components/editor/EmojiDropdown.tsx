@@ -59,11 +59,12 @@ const EmojiDropdown: React.FC<EmojiDropdownProps> = ({ onSelectEmoji }) => {
 
   return (
     <Menu
-      closeOnItemClick={true}
+      // closeOnItemClick={true}
       onClose={() => {
         setSearchText('');
         setFilteredEmojis(emojis);
       }}
+      width={280}
     >
       <Menu.Target>
         <Tooltip position='left' label='Emoji'>
@@ -85,37 +86,39 @@ const EmojiDropdown: React.FC<EmojiDropdownProps> = ({ onSelectEmoji }) => {
           }}
         />
 
-        <VirtuosoGrid
-          style={{ height: 200 }}
-          data={filteredEmojis || []}
-          totalCount={filteredEmojis?.length || 0}
-          overscan={10}
-          itemContent={(index) => {
-            const emoji = filteredEmojis?.[index];
-            return (
-              <Tooltip
-                key={emoji?.name}
-                label={emoji?.name}
-                withArrow
-                position='bottom'
-              >
-                <ActionIcon
-                  variant='subtle'
-                  color='gray'
-                  onClick={() => onSelectEmoji(emoji!)}
+        <Menu.Item>
+          <VirtuosoGrid
+            style={{ height: 200 }}
+            data={filteredEmojis || []}
+            totalCount={filteredEmojis?.length || 0}
+            overscan={10}
+            itemContent={(index) => {
+              const emoji = filteredEmojis?.[index];
+              return (
+                <Tooltip
+                  key={emoji?.name}
+                  label={emoji?.name}
+                  withArrow
+                  position='bottom'
                 >
-                  <Image
-                    src={emoji?.url as string}
-                    alt={emoji?.name as string}
-                    width={20}
-                    height={20}
-                  />
-                </ActionIcon>
-              </Tooltip>
-            );
-          }}
-          listClassName='grid grid-cols-5 gap-2'
-        />
+                  <ActionIcon
+                    variant='subtle'
+                    color='gray'
+                    onClick={() => onSelectEmoji(emoji!)}
+                  >
+                    <Image
+                      src={emoji?.url as string}
+                      alt={emoji?.name as string}
+                      width={20}
+                      height={20}
+                    />
+                  </ActionIcon>
+                </Tooltip>
+              );
+            }}
+            listClassName='grid grid-cols-5 gap-2'
+          />
+        </Menu.Item>
       </Menu.Dropdown>
     </Menu>
   );

@@ -11,6 +11,8 @@ import {
 } from '@tabler/icons-react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { addClassesToParsedHtml } from '@/utils/addClassesToParsedHtml';
+import { useViewportSize } from '@mantine/hooks';
+import classNames from 'classnames';
 
 export interface PreviewPanelProps {
   onOpenParsedDocModal: () => void;
@@ -29,14 +31,15 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({
   isGeneratingPreview,
   onShareHTMLPreview,
 }) => {
+  const { width } = useViewportSize();
   const { markdownValue } = useEditorStore();
   const [previewType, setPreviewType] = React.useState('rendered-html');
 
   const parsedHTML = parseMarkdown(markdownValue);
 
   return (
-    <div className='w-1/2 h-full'>
-      <div className='flex justify-between items-center w-full mb-1'>
+    <div className={classNames('h-full grow', width < 395 ? 'mt-6' : 'mt-0')}>
+      <div className='flex flex-wrap gap-4 justify-between items-center w-full mb-1'>
         <div
           style={{
             accentColor: 'var(--mantine-color-accent)',
@@ -44,6 +47,8 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({
           className='flex items-center gap-4'
         >
           <span className='text-lg font-semibold'>Preview</span>
+        </div>
+        <div className='flex gap-3 items-center'>
           <Select
             allowDeselect={false}
             size='xs'
@@ -56,8 +61,6 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({
               setPreviewType(value as string);
             }}
           />
-        </div>
-        <div className='flex gap-3 items-center'>
           <ActionIcon
             disabled={parsedHTML.trim().length === 0}
             variant='subtle'

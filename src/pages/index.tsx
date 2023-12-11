@@ -90,7 +90,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className='container h-[80vh] my-10 flex gap-5 items-center'>
+    <div className='container h-[80vh] my-10 flex flex-wrap gap-5 items-center'>
       <MarkdownEditor
         isGeneratingPreview={sharePreview.isPending}
         onShareMarkdownPreview={sharePreviewHandler}

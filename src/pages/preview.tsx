@@ -71,8 +71,8 @@ const PreviewPage = () => {
           </Card>
         </div>
       ) : (
-        <div className='h-screen flex-grow'>
-          <h2 className='my-10 max-w-6xl'>Preview</h2>
+        <div className='h-screen flex-grow max-w-6xl'>
+          <h2 className='my-10'>Preview</h2>
 
           <Card
             shadow='sm'
