@@ -105,6 +105,7 @@ const HomePage = () => {
       )}
 
       <Modal
+        centered
         opened={markdownDownloadModalOpen}
         onClose={closeMarkdownDownloadModal}
         title='Download Markdown'
@@ -116,6 +117,7 @@ const HomePage = () => {
       </Modal>
 
       <Modal
+        centered
         opened={parsedDocModalOpen}
         onClose={closeParsedDocModal}
         title='Download PDF'
