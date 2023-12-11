@@ -105,6 +105,12 @@ const HomePage = () => {
       )}
 
       <Modal
+        styles={{
+          title: {
+            fontSize: '1.185rem',
+            fontWeight: 600,
+          },
+        }}
         centered
         opened={markdownDownloadModalOpen}
         onClose={closeMarkdownDownloadModal}
@@ -117,6 +123,12 @@ const HomePage = () => {
       </Modal>
 
       <Modal
+        styles={{
+          title: {
+            fontSize: '1.185rem',
+            fontWeight: 600,
+          },
+        }}
         centered
         opened={parsedDocModalOpen}
         onClose={closeParsedDocModal}
