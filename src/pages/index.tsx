@@ -11,6 +11,7 @@ import { useDownloadPdf } from '@/apis/queries/downloadPdf.query';
 import getBaseUrl from '@/utils/getBaseUrl';
 import { useSharePreview } from '@/apis/queries/sharePreview.query';
 import PreviewModal from '@/components/editor/PreviewModal';
+import { addClassesToParsedHtml } from '@/utils/addClassesToParsedHtml';
 
 const HomePage = () => {
   const [previewLink, setPreviewLink] = React.useState<string | null>(null);
@@ -47,20 +48,20 @@ const HomePage = () => {
     download.mutate(
       {
         fileName: pdfFilename,
-        doc: parseMarkdown(markdownValue),
+        doc: addClassesToParsedHtml(parseMarkdown(markdownValue)),
       },
       {
-        onSuccess: (data) => {
-          // the download link is like this: http://localhost:3000/1627667440.pdf
-          // so we just need to get the last part
-          const fileName = data.fileName;
-          const element = document.createElement('a');
-          //  element.href is sitUrl/fileName
-
-          element.href = `${getBaseUrl('')}${fileName}`;
-          element.download = `${pdfFilename}.pdf`;
-          document.body.appendChild(element);
-          element.click();
+        onSuccess: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.download = `${pdfFilename}.pdf`;
+          a.href = url;
+          a.click();
+          setTimeout(function () {
+            // For Firefox it is necessary to delay revoking the ObjectURL
+            a.remove();
+            URL.revokeObjectURL(url);
+          }, 100);
 
           closeParsedDocModal();
         },

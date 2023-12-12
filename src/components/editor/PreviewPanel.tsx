@@ -38,7 +38,12 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({
   const parsedHTML = parseMarkdown(markdownValue);
 
   return (
-    <div className={classNames('h-full grow', width < 395 ? 'mt-6' : 'mt-0')}>
+    <div
+      className={classNames(
+        'h-full grow lg:grow-0 lg:w-[48%]',
+        width < 395 ? 'mt-6' : 'mt-0'
+      )}
+    >
       <div className='flex flex-wrap gap-4 justify-between items-center w-full mb-1'>
         <div
           style={{

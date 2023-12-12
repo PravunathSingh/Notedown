@@ -1,8 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
+import {
+  S3Client,
+  ListBucketsCommand,
+  ListObjectsV2Command,
+  GetObjectCommand,
+  PutObjectCommand,
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { addClassesToParsedHtml } from '@/utils/addClassesToParsedHtml';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+const S3 = new S3Client({
+  region: 'auto',
+  endpoint: 'https://pub-5a5ad54108aa4d5ea61fd462f29c6885.r2.dev',
+  credentials: {
+    accessKeyId: 'fc124871299ae3063c5c2ba7e8c4483f',
+    secretAccessKey: 'fc124871299ae3063c5c2ba7e8c4483f',
+  },
+});
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== 'POST') {
     res.status(404).json({ message: 'Route Not found' });
     return;
@@ -14,6 +34,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     res.status(400).json({ message: 'Missing type or doc' });
     return;
   }
+
+  console.log(
+    await S3.send(new ListObjectsV2Command({ Bucket: 'preview-files' }))
+  );
 
   if (type === 'md') {
     // get current date and time in iso format

@@ -12,8 +12,7 @@ export const useDownloadPdf = () => {
         body: JSON.stringify(data),
       });
 
-      const resData = await res.json();
-      console.log(resData);
+      const resData = await res.blob();
 
       return resData;
     },

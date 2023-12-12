@@ -14,12 +14,12 @@ A sleek note-taking app that harnesses the simplicity and elegance of Markdown. 
 - [x] Support for searching and replacing text
 - [x] Support for emoji search
 - [x] Download file as markdown, pdf
+- [x] Share file with link expiry
 - [ ] **WIP**: Add code highlight support
 - [ ] **WIP**: Display and toggle line numbers
 - [ ] **WIP**: Add code formatting
 - [ ] **WIP**: Add markdown syntax highlighting
-- [ ] **TODO**: Share file with link expiry
-- [ ] Add command panel, and inline commands
+- [ ] **TODO** Add command panel, and inline commands
 
 ## Features (Core app)
 

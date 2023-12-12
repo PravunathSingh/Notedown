@@ -134,7 +134,11 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   };
 
   return (
-    <div className={classNames('max-w-full grow h-full my-10')}>
+    <div
+      className={classNames(
+        'max-w-full grow lg:grow-0 lg:w-[48%] h-full my-10'
+      )}
+    >
       <div className='flex justify-between gap-4 flex-wrap w-full mb-1'>
         <span className='text-lg font-semibold'>Markdown</span>
         <div className='flex items-center gap-4'>
