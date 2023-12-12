@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
 
 export default async function handler(
   req: NextApiRequest,
